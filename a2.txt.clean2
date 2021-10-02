@@ -1,0 +1,400 @@
+Script started on 2021-10-02 04:23:20+00:00 [TERM="xterm-256color" TTY="/dev/pts/0" COLUMNS="164" LINES="32"]
+]0;lis@f6linux11: ~lis@f6linux11:~$ mkdir a2
+]0;lis@f6linux11: ~lis@f6linux11:~$ cd a2
+]0;lis@f6linux11: ~/a2lis@f6linux11:~/a2$ awk -F"\t" '{print $2}' ~/amazon_reviews_us_Books_v1_02.tsv > customersid.txt
+]0;lis@f6linux11: ~/a2lis@f6linux11:~/a2$ sort customersid.txt > sort_c.txt
+]0;lis@f6linux11: ~/a2lis@f6linux11:~/a2$ uniq -c sort_c.txt >uniq_c.txt
+]0;lis@f6linux11: ~/a2lis@f6linux11:~/a2$ wc uniq_c.txt 
+ 1502381  3004762 25540480 uniq_c.txt
+(1) There are 1502381 unique customer ids
+
+]0;lis@f6linux11: ~/a2lis@f6linux11:~/a2$ awk -F"\t" '{print $4}' ../amazon_reviews_us_Books_v1_02.tsv > product_id.txt
+]0;lis@f6linux11: ~/a2lis@f6linux11:~/a2$ sort product_id.txt > sort_p.txt
+]0;lis@f6linux11: ~/a2lis@f6linux11:~/a2$ uniq -c sort_p.txt > uniq_p.txt
+]0;lis@f6linux11: ~/a2lis@f6linux11:~/a2$ wc uniq_p.txt
+  779734  1559468 14814946 uniq_p.txt
+(1) and 779734 unique product ids
+
+]0;lis@f6linux11: ~/a2lis@f6linux11:~/a2$ sort -nk1r uniq_c.txt > sort_uniq_c.txt
+]0;lis@f6linux11: ~/a2lis@f6linux11:~/a2$ awk '{print $2}' sort_uniq_c.txt > cid.txt
+]0;lis@f6linux11: ~/a2lis@f6linux11:~/a2$ head -n 100 cid.txt > 100cid.txt
+]0;lis@f6linux11: ~/a2lis@f6linux11:~/a2$ wc 100cid.txt 
+100 100 900 100cid.txt
+
+]0;lis@f6linux11: ~/a2lis@f6linux11:~/a2$ 
+]0;lis@f6linux11: ~/a2lis@f6linux11:~/a2$ 
+]0;lis@f6linux11: ~/a2lis@f6linux11:~/a2$ awk -F"\t" '{print $2,$8,$9}' ~/amazon_reviews_us_Books_v1_02.tsv > customer_id_helpfulness_review.txt
+]0;lis@f6linux11: ~/a2lis@f6linux11:~/a2$ mkdir CUSTOMERS
+]0;lis@f6linux11: ~/a2lis@f6linux11:~/a2$ for i in $(cat ~/a2/100cid.txt); do grep "$i" ~/a2/customer_id_helpfulness_review.txt | awk -F" " '{print $2,$3}' > ~/a2/CUSTOMERS/$i.txt; done
+]0;lis@f6linux11: ~/a2lis@f6linux11:~/a2$ cd CUSTOMERS
+]0;lis@f6linux11: ~/a2/CUSTOMERSlis@f6linux11:~/a2/CUSTOMERS$ w
+    103     920    5395
+(2) Here is how I created 100 differernt customer ids and (7) verify I have 100 files
+
+
+]0;lis@f6linux11: ~/a2/CUSTOMERSlis@f6linux11:~/a2/CUSTOMERS$ cd ..
+]0;lis@f6linux11: ~/a2lis@f6linux11:~/a2$ sort -nk1r uniq_p.txt > sort_uniq_p.txt
+]0;lis@f6linux11: ~/a2lis@f6linux11:~/a2$ awk '{print $2}' sort_uniq_p.txt > pid.txt
+]0;lis@f6linux11: ~/a2lis@f6linux11:~/a2$ head -n 100 pid.txt >100pid.txt
+]0;lis@f6linux11: ~/a2lis@f6linux11:~/a2$ awk -F"\t" '{print $4,$8,$9}' ~/amazon_reviews_us_Books_v1_02.tsv > product_id_helpfulness_review.txt
+]0;lis@f6linux11: ~/a2lis@f6linux11:~/a2$ mkdir PRODUCTS
+]0;lis@f6linux11: ~/a2lis@f6linux11:~/a2$ for i in `cat 100pid.txt`; do grep "$i" product_id_helpfulness_review.txt | awk -F" " '{print $2,$3}' > ~/a2/PRODUCTS/$i.txt; done
+]0;lis@f6linux11: ~/a2lis@f6linux11:~/a2$ cd PRODUCTS
+]0;lis@f6linux11: ~/a2/PRODUCTSlis@f6linux11:~/a2/PRODUCTS$ w
+    103     920    5595
+(3) Above is how I created 100 different product ids and (7) verify I have 100 files
+   
+(4)(5)(6) Blowe are the answer for #4,5 and 6
+]0;lis@f6linux11: ~/a2/PRODUCTSlis@f6linux11:~/a2/PRODUCTS$ cd ..
+]0;lis@f6linux11: ~/a2lis@f6linux11:~/a2$ alias l='ls -lat'
+]0;lis@f6linux11: ~/a2lis@f6linux11:~/a2$ alias w='ls -la | wc'
+]0;lis@f6linux11: ~/a2lis@f6linux11:~/a2$ vi ~/.bashrc
+[?1049h[22;0;0t[>4;2m[?1h=[?2004h[1;32r[?12h[?12l[22;2t[22;1t[H[2J[?25l[32;1H"~/.bashrc" 121L, 3846C[2;1H[6n[2;1H  [1;1H[>c]10;?]11;?[1;1Halias ll='ls -alF'
+alias la='ls -A'
+alias l='ls -CF'
+alias lll='ls -altr'
+alias p='pwd'
+alias l='ls -lat'
+alias w='ls -la | wc'
+
+# Add an "alert" alias for long running commands.  Use like so:
+#   sleep 10; alert
+alias alert='notify-send --urgency=low -i "$([ $? = 0 ] && echo terminal || echo error)" "$(history|tail -n1|sed -e '\''s/^\s*[0-9]\+\s*//;s/[;&|]\s*alert$//'\'')"'[13;1H# Alias definitions.
+# You may want to put all your additions into a separate file like
+# ~/.bash_aliases, instead of adding them here directly.
+# See /usr/share/doc/bash-doc/examples in the bash-doc package.
+
+if [ -f ~/.bash_aliases ]; then
+    . ~/.bash_aliases
+fi
+
+# enable programmable completion features (you don't need to enable
+# this, if it's already enabled in /etc/bash.bashrc and /etc/profile
+# sources /etc/bash.bashrc).
+if ! shopt -oq posix; then
+  if [ -f /usr/share/bash-completion/bash_completion ]; then
+    . /usr/share/bash-completion/bash_completion
+  elif [ -f /etc/bash_completion ]; then
+    . /etc/bash_completion
+  fi
+fi[32;147H121,2[9CBot[31;2H[?25h[?25l[32;137H:[31;2H[32;1H[K[32;1H:[?2004h[?25hq[?25l[?2004l[23;2t[23;1t[32;1H[K[32;1H[?2004l[?1l>[?25h[>4;m[?1049l[23;0;0t]0;lis@f6linux11: ~/a2lis@f6linux11:~/a2$ source ~/.bashrc
+]0;lis@f6linux11: ~/a2lis@f6linux11:~/a2$ cd data[K[K[K[K[K[Kd ..
+]0;lis@f6linux11: ~lis@f6linux11:~$ cd datamash-1.3/
+]0;lis@f6linux11: ~/datamash-1.3lis@f6linux11:~/datamash-1.3$ for FILE in ~/a2/CUSTOMERS/*; do CORR=`./datamash  -W ppearson 1:2 < $FILE`;echo "$FILE $CORR"; done > correlation.txt 
+]0;lis@f6linux11: ~/datamash-1.3lis@f6linux11:~/datamash-1.3$ sort -nk2 correlation.txt 
+
+
+(5) customer 52697458 have the least correlated helpfulness scores and review scores, and customer 30559999 have the most correlated helpfulness scores and review scores. The range is from -0.1425 to 0.2135.
+/home/lis/a2/CUSTOMERS/52697458.txt -0.14252275828471
+/home/lis/a2/CUSTOMERS/20595117.txt -0.07801434074194
+/home/lis/a2/CUSTOMERS/52966385.txt -0.071306253746504
+/home/lis/a2/CUSTOMERS/35985708.txt -0.018475208724832
+/home/lis/a2/CUSTOMERS/50736950.txt -0.013727796992368
+/home/lis/a2/CUSTOMERS/50776149.txt -0.0061448727026488
+/home/lis/a2/CUSTOMERS/52223435.txt -0.0026349289854177
+/home/lis/a2/CUSTOMERS/50895620.txt nan
+/home/lis/a2/CUSTOMERS/50941451.txt 0.0049250944457509
+/home/lis/a2/CUSTOMERS/52793250.txt 0.0049836076293453
+/home/lis/a2/CUSTOMERS/46983871.txt 0.0053203252670871
+/home/lis/a2/CUSTOMERS/50122160.txt 0.0079500705902259
+/home/lis/a2/CUSTOMERS/52266433.txt 0.013724947082216
+/home/lis/a2/CUSTOMERS/51065232.txt 0.013752013650581
+/home/lis/a2/CUSTOMERS/36642996.txt 0.014465514553815
+/home/lis/a2/CUSTOMERS/52008531.txt 0.017811475726488
+/home/lis/a2/CUSTOMERS/50389232.txt 0.019539896441349
+/home/lis/a2/CUSTOMERS/45193257.txt 0.021132515307758
+/home/lis/a2/CUSTOMERS/51917998.txt 0.022448391180586
+/home/lis/a2/CUSTOMERS/52706646.txt 0.025110761126103
+/home/lis/a2/CUSTOMERS/50881246.txt 0.027029386976794
+/home/lis/a2/CUSTOMERS/52615377.txt 0.030740558705146
+/home/lis/a2/CUSTOMERS/53071109.txt 0.031330315464942
+/home/lis/a2/CUSTOMERS/39569598.txt 0.032994743885822
+/home/lis/a2/CUSTOMERS/50068216.txt 0.040208873642215
+/home/lis/a2/CUSTOMERS/49042814.txt 0.040504842491862
+/home/lis/a2/CUSTOMERS/51142763.txt 0.041677792338704
+/home/lis/a2/CUSTOMERS/53037408.txt 0.043727709187369
+/home/lis/a2/CUSTOMERS/50199793.txt 0.043764675851012
+/home/lis/a2/CUSTOMERS/52894384.txt 0.044626136926622
+/home/lis/a2/CUSTOMERS/51147790.txt 0.046537167012795
+/home/lis/a2/CUSTOMERS/52797744.txt 0.050037786797692
+/home/lis/a2/CUSTOMERS/51987970.txt 0.051486636075274
+/home/lis/a2/CUSTOMERS/35004134.txt 0.055309254263891
+/home/lis/a2/CUSTOMERS/52476938.txt 0.055596837865367
+/home/lis/a2/CUSTOMERS/51110953.txt 0.055831605020071
+/home/lis/a2/CUSTOMERS/49148452.txt 0.059734436987131
+/home/lis/a2/CUSTOMERS/53084107.txt 0.059862926995826
+/home/lis/a2/CUSTOMERS/51247650.txt 0.060609415951821
+/home/lis/a2/CUSTOMERS/52447634.txt 0.062000110385039
+/home/lis/a2/CUSTOMERS/50608834.txt 0.06205993708533
+/home/lis/a2/CUSTOMERS/50761804.txt 0.062595527593946
+/home/lis/a2/CUSTOMERS/52947077.txt 0.062737374957511
+/home/lis/a2/CUSTOMERS/52753467.txt 0.066920372977256
+/home/lis/a2/CUSTOMERS/50652563.txt 0.067986415610439
+/home/lis/a2/CUSTOMERS/49115690.txt 0.068202332403585
+/home/lis/a2/CUSTOMERS/51243012.txt 0.06835179616414
+/home/lis/a2/CUSTOMERS/50592435.txt 0.068444026754028
+/home/lis/a2/CUSTOMERS/52254603.txt 0.073176446680375
+/home/lis/a2/CUSTOMERS/52845727.txt 0.074886220771932
+/home/lis/a2/CUSTOMERS/49355567.txt 0.084133214894678
+/home/lis/a2/CUSTOMERS/53072811.txt 0.085940719734639
+/home/lis/a2/CUSTOMERS/51325095.txt 0.086940729395386
+/home/lis/a2/CUSTOMERS/51145127.txt 0.087893540376544
+/home/lis/a2/CUSTOMERS/50774468.txt 0.088830355194399
+/home/lis/a2/CUSTOMERS/42800127.txt 0.089102917317791
+/home/lis/a2/CUSTOMERS/50913245.txt 0.090116904917308
+/home/lis/a2/CUSTOMERS/45273033.txt 0.092359619529125
+/home/lis/a2/CUSTOMERS/53082946.txt 0.098723957624567
+/home/lis/a2/CUSTOMERS/43546353.txt 0.098881392684532
+/home/lis/a2/CUSTOMERS/39134375.txt 0.10005442649664
+/home/lis/a2/CUSTOMERS/49273674.txt 0.1023365975441
+/home/lis/a2/CUSTOMERS/52173832.txt 0.10237932118738
+/home/lis/a2/CUSTOMERS/53052943.txt 0.10589722686895
+/home/lis/a2/CUSTOMERS/51010391.txt 0.10743206757669
+/home/lis/a2/CUSTOMERS/49992211.txt 0.1106744637466
+/home/lis/a2/CUSTOMERS/49786731.txt 0.11669140003769
+/home/lis/a2/CUSTOMERS/49693975.txt 0.11816888546413
+/home/lis/a2/CUSTOMERS/51809405.txt 0.11875456413314
+/home/lis/a2/CUSTOMERS/52517734.txt 0.11983203571544
+/home/lis/a2/CUSTOMERS/38672733.txt 0.12121827988843
+/home/lis/a2/CUSTOMERS/51199159.txt 0.12504985186374
+/home/lis/a2/CUSTOMERS/51379338.txt 0.12578151587695
+/home/lis/a2/CUSTOMERS/51210331.txt 0.12678688007083
+/home/lis/a2/CUSTOMERS/50702879.txt 0.12783864743466
+/home/lis/a2/CUSTOMERS/50378566.txt 0.1301622379244
+/home/lis/a2/CUSTOMERS/52774618.txt 0.13275129539799
+/home/lis/a2/CUSTOMERS/51934027.txt 0.13503774269188
+/home/lis/a2/CUSTOMERS/50732546.txt 0.13504126608126
+/home/lis/a2/CUSTOMERS/45284807.txt 0.1384713883907
+/home/lis/a2/CUSTOMERS/49447323.txt 0.13851838267659
+/home/lis/a2/CUSTOMERS/51915884.txt 0.14176373240007
+/home/lis/a2/CUSTOMERS/46134316.txt 0.14278679881351
+/home/lis/a2/CUSTOMERS/52938698.txt 0.15008944716725
+/home/lis/a2/CUSTOMERS/50057481.txt 0.15381696183264
+/home/lis/a2/CUSTOMERS/53008075.txt 0.15857132700717
+/home/lis/a2/CUSTOMERS/52564468.txt 0.16328542608749
+/home/lis/a2/CUSTOMERS/49750558.txt 0.16415290612614
+/home/lis/a2/CUSTOMERS/52830980.txt 0.16537943284871
+/home/lis/a2/CUSTOMERS/53009736.txt 0.16544324685575
+/home/lis/a2/CUSTOMERS/53016962.txt 0.16760279939147
+/home/lis/a2/CUSTOMERS/38491967.txt 0.17020566472814
+/home/lis/a2/CUSTOMERS/41012519.txt 0.17200338503861
+/home/lis/a2/CUSTOMERS/52500542.txt 0.18154880963794
+/home/lis/a2/CUSTOMERS/52496677.txt 0.18251371784434
+/home/lis/a2/CUSTOMERS/49202417.txt 0.18318449848793
+/home/lis/a2/CUSTOMERS/52012289.txt 0.18492316019033
+/home/lis/a2/CUSTOMERS/45041039.txt 0.18720273660608
+/home/lis/a2/CUSTOMERS/53047425.txt 0.19913465813733
+/home/lis/a2/CUSTOMERS/30559999.txt 0.21345504736868
+
+(9)customer 35985708 gave the least helpful reviews, and customer 50895620 is the most helpful one. The range is from 3.0789 to 5.
+]0;lis@f6linux11: ~/datamash-1.3lis@f6linux11:~/datamash-1.3$ for FILE in ~/a2/CUSTOMERS/*; do CORR=`./datamash  -W mean 1 < $FILE`;echo "$FILE $CORR"; done > mean.txt 
+]0;lis@f6linux11: ~/datamash-1.3lis@f6linux11:~/datamash-1.3$ sort -nk2 mean.txt
+/home/lis/a2/CUSTOMERS/35985708.txt 3.078869047619
+/home/lis/a2/CUSTOMERS/51145127.txt 3.3212121212121
+/home/lis/a2/CUSTOMERS/52254603.txt 3.3848144952545
+/home/lis/a2/CUSTOMERS/50068216.txt 3.420260782347
+/home/lis/a2/CUSTOMERS/41012519.txt 3.6674208144796
+/home/lis/a2/CUSTOMERS/50378566.txt 3.7115384615385
+/home/lis/a2/CUSTOMERS/51010391.txt 3.75
+/home/lis/a2/CUSTOMERS/52223435.txt 3.7680672268908
+/home/lis/a2/CUSTOMERS/38672733.txt 3.8724489795918
+/home/lis/a2/CUSTOMERS/52830980.txt 3.911051212938
+/home/lis/a2/CUSTOMERS/52697458.txt 3.9190871369295
+/home/lis/a2/CUSTOMERS/52008531.txt 3.9229249011858
+/home/lis/a2/CUSTOMERS/51065232.txt 3.9350132625995
+/home/lis/a2/CUSTOMERS/53071109.txt 3.951534733441
+/home/lis/a2/CUSTOMERS/50881246.txt 3.9580364212193
+/home/lis/a2/CUSTOMERS/52564468.txt 3.9586374695864
+/home/lis/a2/CUSTOMERS/51210331.txt 3.968253968254
+/home/lis/a2/CUSTOMERS/52173832.txt 3.9810426540284
+/home/lis/a2/CUSTOMERS/51110953.txt 3.9815837937385
+/home/lis/a2/CUSTOMERS/49992211.txt 4.0222804718218
+/home/lis/a2/CUSTOMERS/38491967.txt 4.0351796407186
+/home/lis/a2/CUSTOMERS/51199159.txt 4.037773359841
+/home/lis/a2/CUSTOMERS/53008075.txt 4.0424886191199
+/home/lis/a2/CUSTOMERS/52706646.txt 4.0607553366174
+/home/lis/a2/CUSTOMERS/51809405.txt 4.1218274111675
+/home/lis/a2/CUSTOMERS/51325095.txt 4.1244509516837
+/home/lis/a2/CUSTOMERS/51917998.txt 4.1330275229358
+/home/lis/a2/CUSTOMERS/45041039.txt 4.1399548532731
+/home/lis/a2/CUSTOMERS/49447323.txt 4.146080760095
+/home/lis/a2/CUSTOMERS/50702879.txt 4.1533923303835
+/home/lis/a2/CUSTOMERS/35004134.txt 4.1781701444623
+/home/lis/a2/CUSTOMERS/52012289.txt 4.1864754098361
+/home/lis/a2/CUSTOMERS/53009736.txt 4.1875901875902
+/home/lis/a2/CUSTOMERS/49115690.txt 4.1925708699902
+/home/lis/a2/CUSTOMERS/50774468.txt 4.1954887218045
+/home/lis/a2/CUSTOMERS/51915884.txt 4.1973929236499
+/home/lis/a2/CUSTOMERS/49042814.txt 4.1974169741697
+/home/lis/a2/CUSTOMERS/50652563.txt 4.2244623655914
+/home/lis/a2/CUSTOMERS/46134316.txt 4.2407108239095
+/home/lis/a2/CUSTOMERS/53072811.txt 4.2618025751073
+/home/lis/a2/CUSTOMERS/53047425.txt 4.2902155887231
+/home/lis/a2/CUSTOMERS/49148452.txt 4.3091517857143
+/home/lis/a2/CUSTOMERS/49355567.txt 4.3138686131387
+/home/lis/a2/CUSTOMERS/52966385.txt 4.3212927756654
+/home/lis/a2/CUSTOMERS/51379338.txt 4.3299856527977
+/home/lis/a2/CUSTOMERS/49273674.txt 4.3496115427303
+/home/lis/a2/CUSTOMERS/49786731.txt 4.3531531531532
+/home/lis/a2/CUSTOMERS/52753467.txt 4.3586206896552
+/home/lis/a2/CUSTOMERS/30559999.txt 4.364161849711
+/home/lis/a2/CUSTOMERS/51247650.txt 4.3667205169628
+/home/lis/a2/CUSTOMERS/52517734.txt 4.3718592964824
+/home/lis/a2/CUSTOMERS/45273033.txt 4.4025893958076
+/home/lis/a2/CUSTOMERS/53016962.txt 4.4100294985251
+/home/lis/a2/CUSTOMERS/53082946.txt 4.4117647058824
+/home/lis/a2/CUSTOMERS/50389232.txt 4.4215328467153
+/home/lis/a2/CUSTOMERS/50608834.txt 4.4304174950298
+/home/lis/a2/CUSTOMERS/53084107.txt 4.441215323646
+/home/lis/a2/CUSTOMERS/52947077.txt 4.4627151051625
+/home/lis/a2/CUSTOMERS/36642996.txt 4.4684615384615
+/home/lis/a2/CUSTOMERS/52615377.txt 4.4692192192192
+/home/lis/a2/CUSTOMERS/52938698.txt 4.5017182130584
+/home/lis/a2/CUSTOMERS/49750558.txt 4.5202702702703
+/home/lis/a2/CUSTOMERS/50761804.txt 4.5226480836237
+/home/lis/a2/CUSTOMERS/50941451.txt 4.5304606240713
+/home/lis/a2/CUSTOMERS/52845727.txt 4.5406976744186
+/home/lis/a2/CUSTOMERS/50913245.txt 4.5425531914894
+/home/lis/a2/CUSTOMERS/52894384.txt 4.573417721519
+/home/lis/a2/CUSTOMERS/45284807.txt 4.5749588138386
+/home/lis/a2/CUSTOMERS/51987970.txt 4.5822906641001
+/home/lis/a2/CUSTOMERS/45193257.txt 4.5901639344262
+/home/lis/a2/CUSTOMERS/50736950.txt 4.5963488843813
+/home/lis/a2/CUSTOMERS/39134375.txt 4.6
+/home/lis/a2/CUSTOMERS/51142763.txt 4.6
+/home/lis/a2/CUSTOMERS/52774618.txt 4.6040816326531
+/home/lis/a2/CUSTOMERS/50057481.txt 4.6042884990253
+/home/lis/a2/CUSTOMERS/53052943.txt 4.6089613034623
+/home/lis/a2/CUSTOMERS/52476938.txt 4.6144834930777
+/home/lis/a2/CUSTOMERS/52500542.txt 4.6153846153846
+/home/lis/a2/CUSTOMERS/49693975.txt 4.6156069364162
+/home/lis/a2/CUSTOMERS/52447634.txt 4.6191369606004
+/home/lis/a2/CUSTOMERS/52496677.txt 4.6421768707483
+/home/lis/a2/CUSTOMERS/49202417.txt 4.6470588235294
+/home/lis/a2/CUSTOMERS/43546353.txt 4.6834170854271
+/home/lis/a2/CUSTOMERS/50732546.txt 4.684263348053
+/home/lis/a2/CUSTOMERS/51934027.txt 4.7365591397849
+/home/lis/a2/CUSTOMERS/46983871.txt 4.7794561933535
+/home/lis/a2/CUSTOMERS/50592435.txt 4.7840909090909
+/home/lis/a2/CUSTOMERS/20595117.txt 4.8052343274498
+/home/lis/a2/CUSTOMERS/52793250.txt 4.8117647058824
+/home/lis/a2/CUSTOMERS/42800127.txt 4.8301486199575
+/home/lis/a2/CUSTOMERS/52797744.txt 4.8391521197007
+/home/lis/a2/CUSTOMERS/39569598.txt 4.8396892655367
+/home/lis/a2/CUSTOMERS/52266433.txt 4.8435582822086
+/home/lis/a2/CUSTOMERS/50199793.txt 4.8706004140787
+/home/lis/a2/CUSTOMERS/53037408.txt 4.8804523424879
+/home/lis/a2/CUSTOMERS/51243012.txt 4.9098591549296
+/home/lis/a2/CUSTOMERS/51147790.txt 4.921686746988
+/home/lis/a2/CUSTOMERS/50776149.txt 4.9949916527546
+/home/lis/a2/CUSTOMERS/50122160.txt 4.997992883861
+/home/lis/a2/CUSTOMERS/50895620.txt 5
+
+
+
+(10)The products 038529929 got the highest star_ratings reviews and products 0060763957 got the lowest star_ratinfs reviews. The range is from 0.5901 to 32.4323.
+]0;lis@f6linux11: ~/datamash-1.3lis@f6linux11:~/datamash-1.3$ for FILE in ~/a2/PRODUCTS/*; do CORR=`./datamash  -W mean 2 < $FILE`;echo "$FILE $CORR"; done > mean.txt 
+]0;lis@f6linux11: ~/datamash-1.3lis@f6linux11:~/datamash-1.3$ sort -nk2 mean.txt
+/home/lis/a2/PRODUCTS/038529929X.txt 0.59009900990099
+/home/lis/a2/PRODUCTS/0440414806.txt 0.99579242636746
+/home/lis/a2/PRODUCTS/014131088X.txt 1.039603960396
+/home/lis/a2/PRODUCTS/0446672211.txt 1.0615006150062
+/home/lis/a2/PRODUCTS/0312857691.txt 1.065180102916
+/home/lis/a2/PRODUCTS/0345417623.txt 1.1947194719472
+/home/lis/a2/PRODUCTS/0446608955.txt 1.2765598650927
+/home/lis/a2/PRODUCTS/0671025368.txt 1.4544235924933
+/home/lis/a2/PRODUCTS/0399501487.txt 1.4643423137876
+/home/lis/a2/PRODUCTS/0439139597.txt 1.5164482481947
+/home/lis/a2/PRODUCTS/0140177396.txt 1.5502471169687
+/home/lis/a2/PRODUCTS/0060928336.txt 1.5641791044776
+/home/lis/a2/PRODUCTS/043935806X.txt 1.5861621621622
+/home/lis/a2/PRODUCTS/0385335482.txt 1.5967479674797
+/home/lis/a2/PRODUCTS/0553272535.txt 1.6650943396226
+/home/lis/a2/PRODUCTS/0316601950.txt 1.7392795883362
+/home/lis/a2/PRODUCTS/0590353403.txt 1.8474218089603
+/home/lis/a2/PRODUCTS/0439064864.txt 1.8521241830065
+/home/lis/a2/PRODUCTS/0679781587.txt 1.9715481171548
+/home/lis/a2/PRODUCTS/059035342X.txt 2.0963244613435
+/home/lis/a2/PRODUCTS/0439136350.txt 2.1512301013025
+/home/lis/a2/PRODUCTS/014028009X.txt 2.2654545454545
+/home/lis/a2/PRODUCTS/068484267X.txt 2.2702237521515
+/home/lis/a2/PRODUCTS/0451526341.txt 2.2832167832168
+/home/lis/a2/PRODUCTS/0679444815.txt 2.3717001055966
+/home/lis/a2/PRODUCTS/1558743669.txt 2.4802083333333
+/home/lis/a2/PRODUCTS/0385497466.txt 2.5291607396871
+/home/lis/a2/PRODUCTS/0812550706.txt 2.5301478953356
+/home/lis/a2/PRODUCTS/0374332657.txt 2.6767317939609
+/home/lis/a2/PRODUCTS/0671021001.txt 2.9304207119741
+/home/lis/a2/PRODUCTS/0689817851.txt 3.0255639097744
+/home/lis/a2/PRODUCTS/039915079X.txt 3.0310650887574
+/home/lis/a2/PRODUCTS/0451524934.txt 3.0914205344585
+/home/lis/a2/PRODUCTS/0671027344.txt 3.1438434982739
+/home/lis/a2/PRODUCTS/0440219078.txt 3.2659574468085
+/home/lis/a2/PRODUCTS/0446310786.txt 3.2695763799743
+/home/lis/a2/PRODUCTS/0385484518.txt 3.5224153705398
+/home/lis/a2/PRODUCTS/0345342968.txt 3.5328947368421
+/home/lis/a2/PRODUCTS/0316666343.txt 3.5602766798419
+/home/lis/a2/PRODUCTS/0671027360.txt 3.5716666666667
+/home/lis/a2/PRODUCTS/038550120X.txt 3.5831932773109
+/home/lis/a2/PRODUCTS/0316769487.txt 3.6614227086183
+/home/lis/a2/PRODUCTS/0312278586.txt 3.7047146401985
+/home/lis/a2/PRODUCTS/0684801523.txt 4.0774410774411
+/home/lis/a2/PRODUCTS/0679735771.txt 4.1039325842697
+/home/lis/a2/PRODUCTS/0399150897.txt 4.2168067226891
+/home/lis/a2/PRODUCTS/039914563X.txt 4.2959183673469
+/home/lis/a2/PRODUCTS/0060938455.txt 4.659121171771
+/home/lis/a2/PRODUCTS/0812548051.txt 4.6988727858293
+/home/lis/a2/PRODUCTS/0671524313.txt 4.7492625368732
+/home/lis/a2/PRODUCTS/0142001740.txt 4.9250334672021
+/home/lis/a2/PRODUCTS/0786868716.txt 4.9834350479512
+/home/lis/a2/PRODUCTS/1594480001.txt 5.5782208588957
+/home/lis/a2/PRODUCTS/0609610597.txt 5.7827586206897
+/home/lis/a2/PRODUCTS/0439784549.txt 5.833820662768
+/home/lis/a2/PRODUCTS/0312864256.txt 6.233045622688
+/home/lis/a2/PRODUCTS/0060987103.txt 6.4171597633136
+/home/lis/a2/PRODUCTS/0060930535.txt 6.5469678953627
+/home/lis/a2/PRODUCTS/0812511816.txt 6.5612382234186
+/home/lis/a2/PRODUCTS/0385337116.txt 6.6620253164557
+/home/lis/a2/PRODUCTS/0553375407.txt 6.7191413237925
+/home/lis/a2/PRODUCTS/0312195516.txt 6.8362694300518
+/home/lis/a2/PRODUCTS/0842329129.txt 6.8584405753217
+/home/lis/a2/PRODUCTS/0345340426.txt 7.4749536178108
+/home/lis/a2/PRODUCTS/0312864590.txt 8.1772009029345
+/home/lis/a2/PRODUCTS/0385504209.txt 8.2093653250774
+/home/lis/a2/PRODUCTS/0375826688.txt 8.2839737582006
+/home/lis/a2/PRODUCTS/0156027321.txt 8.2958963282937
+/home/lis/a2/PRODUCTS/1576734587.txt 9.2905027932961
+/home/lis/a2/PRODUCTS/0440212561.txt 9.7066189624329
+/home/lis/a2/PRODUCTS/0446532231.txt 9.7919293820933
+/home/lis/a2/PRODUCTS/0449004023.txt 10.030015797788
+/home/lis/a2/PRODUCTS/0399142789.txt 10.074020319303
+/home/lis/a2/PRODUCTS/0895261901.txt 10.25
+/home/lis/a2/PRODUCTS/0316011770.txt 10.5
+/home/lis/a2/PRODUCTS/0060875410.txt 11.143790849673
+/home/lis/a2/PRODUCTS/0525947647.txt 11.535258814704
+/home/lis/a2/PRODUCTS/0971453209.txt 12.026315789474
+/home/lis/a2/PRODUCTS/044652252X.txt 12.207194244604
+/home/lis/a2/PRODUCTS/0785263535.txt 12.373214285714
+/home/lis/a2/PRODUCTS/0060582510.txt 12.514362057448
+/home/lis/a2/PRODUCTS/1400050308.txt 13.043454038997
+/home/lis/a2/PRODUCTS/0399144463.txt 13.060550458716
+/home/lis/a2/PRODUCTS/0060514558.txt 13.356489945155
+/home/lis/a2/PRODUCTS/0553573403.txt 13.696388261851
+/home/lis/a2/PRODUCTS/0975599518.txt 13.990185387132
+/home/lis/a2/PRODUCTS/0060392452.txt 14.91317671093
+/home/lis/a2/PRODUCTS/0743222245.txt 15.25
+/home/lis/a2/PRODUCTS/0066214130.txt 16.085178875639
+/home/lis/a2/PRODUCTS/0060193395.txt 16.300150829563
+/home/lis/a2/PRODUCTS/0393317552.txt 16.308256880734
+/home/lis/a2/PRODUCTS/0062502182.txt 16.315068493151
+/home/lis/a2/PRODUCTS/0451191145.txt 19.355371900826
+/home/lis/a2/PRODUCTS/1400046610.txt 20.34126984127
+/home/lis/a2/PRODUCTS/0310205719.txt 21.292915531335
+/home/lis/a2/PRODUCTS/0425198243.txt 22.643233743409
+/home/lis/a2/PRODUCTS/0446677450.txt 22.747540983607
+/home/lis/a2/PRODUCTS/0060761288.txt 27.224328593997
+/home/lis/a2/PRODUCTS/0895260174.txt 28.986998087954
+/home/lis/a2/PRODUCTS/0060763957.txt 32.432300163132
+]0;lis@f6linux11: ~/datamash-1.3lis@f6linux11:~/datamash-1.3$ exit
+
+Script done on 2021-10-02 04:37:19+00:00 [COMMAND_EXIT_CODE="0"]
